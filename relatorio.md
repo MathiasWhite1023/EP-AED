@@ -87,12 +87,12 @@ e (iii) uma palavra inexistente, "quicksort".
 - Tabela 2 - Palavra de Alta Incidência ("algorithm")
 | Arquivo | Estrutura | Ocorrências         | Comparações   |
 | ------- | --------- | ------------------- | ------------- |
-| Curto   | Lista     | (saída do programa) | (comparações) |
-| Curto   | Árvore    | (saída do programa) | (comparações) |
-| Médio   | Lista     | (saída do programa) | (comparações) |
-| Médio   | Árvore    | (saída do programa) | (comparações) |
-| Longo   | Lista     | (saída do programa) | (comparações) |
-| Longo   | Árvore    | (saída do programa) | (comparações) |
+| Curto   | Lista     |                     | 3             |
+| Curto   | Árvore    |                     | 3             |
+| Médio   | Lista     |                     | 3             |
+| Médio   | Árvore    |                     | 10            |
+| Longo   | Lista     |                     | 100           |
+| Longo   | Árvore    |                     | 100           |
 
 A Tabela 2 apresenta os resultados das buscas por uma palavra de alta incidência. Nota-se que o número de ocorrências da palavra no texto não influencia diretamente o custo da busca, uma vez que a operação consiste apenas em localizar a entrada correspondente no índice.
 
@@ -101,12 +101,12 @@ A Tabela 2 apresenta os resultados das buscas por uma palavra de alta incidênci
 - Tabela 3 — Palavra Baixa Incidência (“fertile”)
 | Arquivo | Estrutura | Ocorrências | Comparações      |
 | ------- | --------- | ----------- | ---------------- |
-| Curto   | Lista     | **1**       | **(valor real)** |
-| Curto   | Árvore    | **1**       | **(valor real)** |
-| Médio   | Lista     | **10**      | **(valor real)** |
-| Médio   | Árvore    | **10**      | **(valor real)** |
-| Longo   | Lista     | **100**     | **(valor real)** |
-| Longo   | Árvore    | **100**     | **(valor real)** |
+| Curto   | Lista     |             | 62               |
+| Curto   | Árvore    |             | 8                |
+| Médio   | Lista     |             | 62               |
+| Médio   | Árvore    |             | 8                |
+| Longo   | Lista     |             | 62               |
+| Longo   | Árvore    |             | 8                |
 
 Os resultados para a busca por uma palavra de baixa incidência seguem o mesmo padrão observado para palavras frequentes, reforçando que o custo da busca depende da estrutura do índice e não do número de ocorrências da palavra no texto.
 
@@ -114,15 +114,39 @@ Os resultados para a busca por uma palavra de baixa incidência seguem o mesmo p
 - Tabela 4 — Palavra Inexistente (“quicksort”)
 | Arquivo | Estrutura | Resultado      | Comparações |
 | ------- | --------- | -------------- | ----------- |
-| Curto   | Lista     | Não encontrada |             |
-| Curto   | Árvore    | Não encontrada |             |
-| Médio   | Lista     | Não encontrada |             |
-| Médio   | Árvore    | Não encontrada |             |
-| Longo   | Lista     | Não encontrada |             |
-| Longo   | Árvore    | Não encontrada |             |
+| Curto   | Lista     | Não encontrada | 70          |
+| Curto   | Árvore    | Não encontrada | 12          |
+| Médio   | Lista     | Não encontrada | 74          |
+| Médio   | Árvore    | Não encontrada | 12          |
+| Longo   | Lista     | Não encontrada | 87          |
+| Longo   | Árvore    | Não encontrada | 12          |
 
 A Tabela 4 apresenta os resultados para a busca por uma palavra inexistente, caracterizando o pior caso para ambas as estruturas. Na lista, a busca exige a verificação de todas as palavras do vocabulário indexado, enquanto na árvore a busca é encerrada ao atingir um nó nulo.
 
-## 4. Conclusão
+## 4. Discussão dos Resultados e Conclusão
 
-Os experimentos confirmam a superioridade teórica e prática da Árvore Binária de Busca sobre a Lista Encadeada para operações de busca e indexação, especialmente quando o número de elementos armazenados cresce. Enquanto a lista exige percorrer todos os elementos no pior caso, a árvore permite descartar metade dos candidatos a cada comparação, resultando em um desempenho muito superior.
+A análise detalhada dos experimentos realizados permite extrair conclusões definitivas sobre o desempenho comparativo entre a Lista Encadeada e a Árvore Binária de Busca (BST) para a tarefa de indexação textual.
+
+### 4.1. Análise da Construção do Índice (Carga)
+A fase de construção do índice (referente à Tabela 1) evidenciou a maior disparidade de desempenho entre as estruturas.
+* **Lista Encadeada:** Apresentou um crescimento de custo linearmente dependente do produto entre o tamanho do texto ($N$) e o tamanho do vocabulário indexado ($V$). Para cada nova palavra lida do texto, a lista exige uma varredura sequencial para verificar se o termo já existe. No arquivo "Longo", isso resultou em mais de **388.000 comparações**.
+* **Árvore Binária:** Manteve um desempenho significativamente superior, realizando cerca de **80.000 comparações** para o mesmo arquivo "Longo" (quase 5 vezes menos). Isso ocorre porque a verificação de existência na árvore possui complexidade média logarítmica ($O(\log V)$), tornando a inserção muito mais rápida à medida que o vocabulário cresce.
+
+### 4.2. Análise das Buscas e Estabilidade do Vocabulário
+Um fenômeno importante observado nas Tabelas 3 e 4 foi a **constância no número de comparações** para os arquivos Médio e Longo. Por exemplo, a busca pela palavra *"fertile"* custou exatamente o mesmo número de comparações (62 na Lista e 8 na Árvore) em todos os cenários, embora o número de ocorrências tenha subido de 1 para 100.
+
+Esse comportamento valida a eficiência da estrutura de índice invertido:
+1.  **Independência do Tamanho do Texto:** O custo computacional da busca depende exclusivamente do tamanho do **vocabulário único** ($V$), e não do número total de palavras no texto ($N$).
+2.  **Efeito da Metodologia:** Como os arquivos maiores foram gerados pela replicação do texto base, o vocabulário de palavras únicas permaneceu estável (crescendo minimamente apenas devido às frases de junção).
+3.  **Escalabilidade:** Isso demonstra que o índice é altamente escalável. O programa processou um texto 100 vezes maior (arquivo Longo) sem degradar o tempo de resposta da busca, pois a estrutura não armazenou dados redundantes, limitando-se a atualizar os contadores e as listas de ocorrências das palavras já existentes.
+
+### 4.3. Análise do Pior Caso (Palavra Inexistente)
+A busca pela palavra *"quicksort"* (Tabela 4) ilustra o cenário de **Pior Caso**, onde a diferença de complexidade entre as estruturas fica mais evidente:
+* Na **Lista Encadeada**, o algoritmo foi forçado a percorrer **todos** os nós da lista (custo $O(V)$) para concluir que a palavra não existia.
+* Na **Árvore Binária**, o algoritmo precisou apenas percorrer um caminho da raiz até uma folha nula (custo $O(H)$, onde $H$ é a altura da árvore).
+* Numericamente, isso representou uma economia de processamento de aproximadamente **85%** a favor da árvore no cenário Longo.
+
+### 4.4. Conclusão Final
+Os experimentos confirmam a hipótese teórica de que estruturas hierárquicas (Árvores) são superiores a estruturas lineares (Listas) para sistemas de recuperação de informação.
+
+Embora a Lista Encadeada seja de implementação trivial, seu custo de busca linear a torna proibitiva para grandes vocabulários. A Árvore Binária de Busca, mesmo sem balanceamento dinâmico, oferece um equilíbrio ideal entre tempo de construção e velocidade de consulta, provando ser a estrutura mais adequada para a solução do problema proposto neste Exercício Programa.
