@@ -376,7 +376,7 @@ void print_occurrences(Node *node) {
   if (!node)
     return;
 
-  printf("Existem %d ocorrências da palavra '%s' na(s) seguinte(s) linha(s):\n",
+  printf("Existem %d ocorrencias da palavra '%s' na(s) seguinte(s) linha(s):\n",
          node->count, node->word);
 
   Occurrence *occ = node->lines_head;
