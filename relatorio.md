@@ -87,12 +87,12 @@ e (iii) uma palavra inexistente, "quicksort".
 - Tabela 2 - Palavra de Alta Incidência ("algorithm")
 | Arquivo | Estrutura | Ocorrências         | Comparações   |
 | ------- | --------- | ------------------- | ------------- |
-| Curto   | Lista     |                     | 3             |
-| Curto   | Árvore    |                     | 3             |
-| Médio   | Lista     |                     | 3             |
-| Médio   | Árvore    |                     | 10            |
-| Longo   | Lista     |                     | 100           |
-| Longo   | Árvore    |                     | 100           |
+| Curto   | Lista     | 4                   | 3             |
+| Curto   | Árvore    | 4                   | 3             |
+| Médio   | Lista     | 50                  | 3             |
+| Médio   | Árvore    | 50                  | 3             |
+| Longo   | Lista     | 503                 | 3             |
+| Longo   | Árvore    | 503                 | 3             |
 
 A Tabela 2 apresenta os resultados das buscas por uma palavra de alta incidência. Nota-se que o número de ocorrências da palavra no texto não influencia diretamente o custo da busca, uma vez que a operação consiste apenas em localizar a entrada correspondente no índice.
 
@@ -101,12 +101,12 @@ A Tabela 2 apresenta os resultados das buscas por uma palavra de alta incidênci
 - Tabela 3 — Palavra Baixa Incidência (“fertile”)
 | Arquivo | Estrutura | Ocorrências | Comparações      |
 | ------- | --------- | ----------- | ---------------- |
-| Curto   | Lista     |             | 62               |
-| Curto   | Árvore    |             | 8                |
-| Médio   | Lista     |             | 62               |
-| Médio   | Árvore    |             | 8                |
-| Longo   | Lista     |             | 62               |
-| Longo   | Árvore    |             | 8                |
+| Curto   | Lista     | 1           | 62               |
+| Curto   | Árvore    | 1           | 8                |
+| Médio   | Lista     | 10          | 62               |
+| Médio   | Árvore    | 10          | 8                |
+| Longo   | Lista     | 100         | 62               |
+| Longo   | Árvore    | 100         | 8                |
 
 Os resultados para a busca por uma palavra de baixa incidência seguem o mesmo padrão observado para palavras frequentes, reforçando que o custo da busca depende da estrutura do índice e não do número de ocorrências da palavra no texto.
 
