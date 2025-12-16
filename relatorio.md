@@ -1,47 +1,127 @@
 # Relatório do EP Indexador de Palavras
 
-**Aluno(s):** [Seu Nome Aqui]
+**Aluno(s):** Matheus Branco, Julio Cesar Galdino de Souza
 **Disciplina:** ACH2023 - Algoritmos e Estruturas de Dados I
 
 ---
 
 ## 1. Introdução
 
-Este relatório apresenta os resultados obtidos com a implementação de um indexador de palavras utilizando duas estruturas de dados distintas: uma **Lista Encadeada** e uma **Árvore Binária de Busca (BST)**. O objetivo é comparar o desempenho de ambas as estruturas em termos de número de comparações realizadas durante a fase de construção do índice e de busca.
+Este relatório apresenta os resultados obtidos com a implementação de um indexador e buscador de palavras desenvolvido como parte do Exercício Programa da disciplina ACH2023 – Algoritmos e Estruturas de Dados I. O programa utiliza duas estruturas de dados distintas para a construção do índice: uma Lista Encadeada e uma Árvore Binária de Busca (BST).
+
+O objetivo principal dos experimentos realizados é comparar o desempenho dessas duas estruturas em termos do número de comparações entre strings realizadas tanto durante a fase de construção do índice quanto durante a realização de buscas por palavras. Para isso, foram utilizados arquivos de texto com tamanhos crescentes, denominados curto, médio e longo, permitindo analisar o impacto do aumento do volume de dados e do vocabulário indexado sobre o custo das operações.
+
+Além disso, foram avaliados diferentes cenários de busca, incluindo palavras de alta incidência, baixa incidência e palavras inexistentes no texto, de modo a contemplar casos médios e de pior caso para cada estrutura de dados. Os resultados obtidos são analisados e discutidos à luz da teoria estudada ao longo da disciplina.
 
 ## 2. Metodologia
 
-Foram realizados experimentos utilizando dois arquivos de texto:
-1.  `texto.txt`: O texto exemplo fornecido no enunciado (13 linhas, aprox. 100 palavras).
-2.  `texto_large.txt`: O mesmo texto duplicado 100 vezes (1300 linhas, aprox. 10000 palavras).
+Os experimentos realizados têm como objetivo avaliar o custo, em número de comparações entre strings, das operações de construção do índice e de busca por palavras em duas estruturas de dados distintas: Lista Encadeada e Árvore Binária de Busca (BST).
 
-Para cada arquivo, executou-se o programa nos modos `lista` e `arvore`, coletando-se o número de comparações de strings realizadas para a construção do índice.
+### 2.1 Conjunto de Dados
+Foram utilizados três arquivos de texto com tamanhos crescentes, denominados curto, médio e longo, construídos a partir do texto-base fornecido no enunciado do exercício. A ampliação dos arquivos foi realizada de forma controlada, por meio da replicação parcial do texto e da adição de frases extras, com o objetivo de aumentar tanto o número total de palavras quanto o tamanho do vocabulário indexado.
 
-Note que, como o arquivo maior é composto apenas por repetições do menor, o número de palavras *únicas* (vocabulário) manteve-se constante em 70 palavras. Isso permite analisar o comportamento do custo de inserção à medida que a entrada cresce, mas a estrutura do índice mantém tamanho fixo.
+As principais características dos arquivos são resumidas a seguir:
+
+- Arquivo curto (texto_curto.txt): texto original do enunciado, contendo aproximadamente 13 linhas, cerca de 100 palavras e cerca de 70 palavras únicas.
+
+- Arquivo médio (texto_medio.txt): composto pela replicação do texto base com adição de frases padronizadas ao final de cada bloco, resultando em aproximadamente 150 linhas, cerca de 1.200 palavras e um vocabulário de tamanho intermediário.
+
+- Arquivo longo (texto_longo.txt): obtido a partir da replicação do arquivo médio, com variação cíclica das frases adicionais, totalizando aproximadamente 1.500 linhas, cerca de 12.000 palavras e um vocabulário significativamente maior.
+
+Essa estratégia permitiu analisar o impacto do crescimento do volume de dados e do vocabulário de forma gradual e controlada.
+
+### 2.2 Construção do Índice
+Em cada execução do programa, o arquivo de texto foi carregado integralmente em memória, sendo armazenado linha por linha em uma estrutura sequencial. Em seguida, cada palavra do texto foi processada e inserida no índice, de acordo com o tipo de estrutura selecionada (lista ou arvore).
+
+Durante a construção do índice, o programa contabilizou o número total de comparações entre strings realizadas para verificar a existência de uma palavra no índice e para determinar sua posição de inserção, conforme o comportamento da estrutura de dados utilizada.
+
+### 2.3 Cenários de Busca
+
+Após a construção do índice, foram realizadas buscas por palavras representando diferentes cenários:
+
+Palavra de alta incidência: termo que ocorre diversas vezes no texto, utilizado para avaliar o comportamento da busca em situações comuns.
+
+Palavra de baixa incidência: termo que ocorre poucas vezes, representando um caso intermediário.
+
+Palavra inexistente: termo que não ocorre no texto, caracterizando o pior caso para ambas as estruturas.
+
+As mesmas palavras foram utilizadas nas buscas em todos os arquivos e para ambos os tipos de índice, garantindo a comparabilidade dos resultados.
+
+### 2.4 Métrica de Avaliação
+
+A principal métrica utilizada nos experimentos foi o número de comparações entre strings, contabilizado separadamente para:
+
+- a fase de construção do índice;
+
+- cada operação de busca realizada.
+
+Essa métrica foi escolhida por refletir diretamente o custo das operações fundamentais das estruturas de dados estudadas, sendo independente de fatores externos como velocidade de processamento ou características do hardware utilizado.
+
 
 ## 3. Resultados
 
-### Construção do Índice
+### 3.1. Construção do Índice
 
-A tabela abaixo resume os resultados obtidos para a fase de carga/indexação:
+- Tabela 1 - Construção do índice
+| Arquivo | Linhas | Palavras Únicas | Estrutura | Comparações (Construção) |
+| ------- | ------ | --------------- | --------- | ------------------------ |
+| Curto   | 11     | 70              | Lista     | 3412                     |
+| Curto   | 11     | 70              | Árvore    | 691                      |
+| Médio   | 129    | 74              | Lista     | 38346                    |
+| Médio   | 129    | 74              | Árvore    | 7966                     |
+| Longo   | 1219   | 87              | Lista     | 388193                   |
+| Longo   | 1219   | 87              | Árvore    | 80810                    |
 
-| Arquivo | Linhas | Palavras Únicas | Comparações (Lista) | Comparações (Árvore) | Razão (Lista/Árvore) |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| `texto.txt` | 13 | 70 | 3.412 | 691 | ~4.9x |
-| `texto_large.txt` | 1300 | 70 | 348.130 | 76.030 | ~4.6x |
+A Tabela 1 apresenta o número de comparações realizadas durante a construção do índice para os três arquivos de texto avaliados. Observa-se que o número de comparações cresce à medida que o tamanho do texto e do vocabulário aumentam, sendo consistentemente maior na implementação baseada em lista quando comparada à árvore binária de busca.
 
-### Análise
 
-1.  **Diferença de Desempenho**: A implementação utilizando Árvore Binária de Busca mostrou-se significativamente mais eficiente que a Lista Encadeada, realizando cerca de 4 a 5 vezes menos comparações para este conjunto de dados.
-    *   **Lista**: Para cada palavra lida, é feita uma busca linear na lista. No pior caso (palavra nova ou no fim da lista), o custo é proporcional ao tamanho atual do vocabulário (V). Custo total ≈ O(N * V).
-    *   **Árvore**: A busca é feita descendo a árvore. O custo é proporcional à altura da árvore (H). Em uma árvore não balanceada (como implementada), H tende a ser muito menor que V (idealmente log₂ V). Custo total ≈ O(N * H).
+### 3.2. Resultados das Buscas por Palavras
 
-2.  **Crescimento**: Ao aumentar o tamanho da entrada em 100x (mantendo o vocabulário fixo), o número de comparações cresceu linearmente (aprox. 100x) em ambos os casos.
-    *   Lista: 3.412 -> 348.130 (~102x)
-    *   Árvore: 691 -> 76.030 (~110x)
-    Isso ocorre porque, após as primeiras 70 inserções que constroem a estrutura, todas as subsequentes operações são buscas de palavras já existentes. Como o tamanho da estrutura (70 nós) não muda, o custo por palavra torna-se constante (médio).
-    *   Custo médio/palavra (Lista) ≈ 348130 / 10000 ≈ 35 comparações (metade de 70, esperado para busca linear média).
-    *   Custo médio/palavra (Árvore) ≈ 76030 / 10000 ≈ 7.6 comparações (compatível com log₂ 70 ≈ 6.1 e altura 11).
+#### Definição das Palavras Buscadas
+Para a avaliação das operações de busca, foram selecionadas três categorias de palavras:
+(i) uma palavra de alta incidência, "algorithm";
+(ii) uma palavra de baixa incidência, "fertile";
+e (iii) uma palavra inexistente, "quicksort".
+
+### 3.3. Busca por Palavra de Alta Incidência
+- Tabela 2 - Palavra de Alta Incidência ("algorithm")
+| Arquivo | Estrutura | Ocorrências         | Comparações   |
+| ------- | --------- | ------------------- | ------------- |
+| Curto   | Lista     | (saída do programa) | (comparações) |
+| Curto   | Árvore    | (saída do programa) | (comparações) |
+| Médio   | Lista     | (saída do programa) | (comparações) |
+| Médio   | Árvore    | (saída do programa) | (comparações) |
+| Longo   | Lista     | (saída do programa) | (comparações) |
+| Longo   | Árvore    | (saída do programa) | (comparações) |
+
+A Tabela 2 apresenta os resultados das buscas por uma palavra de alta incidência. Nota-se que o número de ocorrências da palavra no texto não influencia diretamente o custo da busca, uma vez que a operação consiste apenas em localizar a entrada correspondente no índice.
+
+
+### 3.4. Busca por Palavra de Baixa Incidência
+- Tabela 3 — Palavra Baixa Incidência (“fertile”)
+| Arquivo | Estrutura | Ocorrências | Comparações      |
+| ------- | --------- | ----------- | ---------------- |
+| Curto   | Lista     | **1**       | **(valor real)** |
+| Curto   | Árvore    | **1**       | **(valor real)** |
+| Médio   | Lista     | **10**      | **(valor real)** |
+| Médio   | Árvore    | **10**      | **(valor real)** |
+| Longo   | Lista     | **100**     | **(valor real)** |
+| Longo   | Árvore    | **100**     | **(valor real)** |
+
+Os resultados para a busca por uma palavra de baixa incidência seguem o mesmo padrão observado para palavras frequentes, reforçando que o custo da busca depende da estrutura do índice e não do número de ocorrências da palavra no texto.
+
+### 3.5. Busca por Palavra Inexistente (Pior Caso)
+- Tabela 4 — Palavra Inexistente (“quicksort”)
+| Arquivo | Estrutura | Resultado      | Comparações |
+| ------- | --------- | -------------- | ----------- |
+| Curto   | Lista     | Não encontrada |             |
+| Curto   | Árvore    | Não encontrada |             |
+| Médio   | Lista     | Não encontrada |             |
+| Médio   | Árvore    | Não encontrada |             |
+| Longo   | Lista     | Não encontrada |             |
+| Longo   | Árvore    | Não encontrada |             |
+
+A Tabela 4 apresenta os resultados para a busca por uma palavra inexistente, caracterizando o pior caso para ambas as estruturas. Na lista, a busca exige a verificação de todas as palavras do vocabulário indexado, enquanto na árvore a busca é encerrada ao atingir um nó nulo.
 
 ## 4. Conclusão
 

@@ -58,6 +58,7 @@ void add_line(TextStore *store, const char *line);
 void free_text_store(TextStore *store);
 
 char *normalize_word(char *token);
+char *read_line(FILE *f);
 
 // --- Globals ---
 TextStore g_text;
@@ -90,14 +91,10 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  char buffer[2048]; // Reasonable line max length
-  while (fgets(buffer, sizeof(buffer), f)) {
-    // Remove trailing newline
-    size_t len = strlen(buffer);
-    if (len > 0 && buffer[len - 1] == '\n') {
-      buffer[len - 1] = '\0';
-    }
-    add_line(&g_text, buffer);
+  char *line;
+  while ((line = read_line(f)) != NULL) {
+    add_line(&g_text, line);
+    free(line); // add_line makes a copy, so we free this one
   }
   fclose(f);
 
@@ -481,4 +478,36 @@ int get_tree_height(Node *root) {
   int hl = get_tree_height(root->left);
   int hr = get_tree_height(root->right);
   return (hl > hr ? hl : hr) + 1;
+}
+
+char *read_line(FILE *f) {
+  int capacity = 128;
+  int pos = 0;
+  char *buffer = malloc(capacity * sizeof(char));
+  if (!buffer) return NULL;
+
+  int c;
+  while (1) {
+    c = fgetc(f);
+    if (c == EOF || c == '\n') break;
+
+    if (pos >= capacity - 1) {
+      capacity *= 2;
+      char *new_buf = realloc(buffer, capacity * sizeof(char));
+      if (!new_buf) {
+        free(buffer);
+        return NULL; // Memory error
+      }
+      buffer = new_buf;
+    }
+    buffer[pos++] = (char)c;
+  }
+
+  if (pos == 0 && c == EOF) {
+    free(buffer);
+    return NULL; // End of file
+  }
+
+  buffer[pos] = '\0';
+  return buffer;
 }
