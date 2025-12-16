@@ -1,0 +1,7 @@
+ep
+*.o
+*.dSYM
+.DS_Store
+
+ep_test
+teste_gigante.txt
